@@ -19,7 +19,9 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -56,6 +58,10 @@ func NewGKEClient(account, endpoint string) (k8s.Interface, error) {
 		return nil, err
 	}
 
+	if !strings.HasPrefix(endpoint, "https") {
+		endpoint = "https://" + endpoint
+	}
+
 	return k8s.NewForConfig(&rest.Config{
 		Host:            endpoint,
 		TLSClientConfig: rest.TLSClientConfig{Insecure: true},
@@ -70,8 +76,12 @@ func NewGKEClient(account, endpoint string) (k8s.Interface, error) {
 // WaitOnKubeAPI waits for the kube-apiserver to become available
 func WaitOnKubeAPI(ctx context.Context, client k8s.Interface, interval, timeout time.Duration) error {
 	return wait.PollImmediate(interval, timeout, func() (bool, error) {
+		fmt.Println("checkin api- DHSJHDJSHDSJHD:")
+
 		healthStatus := 0
 		client.Discovery().RESTClient().Get().AbsPath("/healthz").Do().StatusCode(&healthStatus)
+		fmt.Printf("HEL %v\n", healthStatus)
+
 		if healthStatus != http.StatusOK {
 			return false, nil
 		}
