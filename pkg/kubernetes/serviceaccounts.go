@@ -38,12 +38,15 @@ func WaitForServiceAccountToken(client k8s.Interface, namespace, name string, ti
 	defer cancel()
 
 	go func() {
+		fmt.Println("dsjdksjds")
 		for {
 			select {
 			case <-ctx.Done():
 				return
 			default:
 			}
+			fmt.Println("checking")
+
 			if err := func() error {
 				sa, err := client.CoreV1().ServiceAccounts(namespace).Get(name, metav1.GetOptions{})
 				if err != nil {

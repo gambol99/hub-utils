@@ -46,6 +46,11 @@ func New() (k8s.Interface, error) {
 	return k8s.NewForConfig(config)
 }
 
+// NewFromToken creates a kubernetes client from a endpoint and token
+func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
+	return nil, nil
+}
+
 // NewGKEClient returns a kube api client for gke clusters
 func NewGKEClient(account, endpoint string) (k8s.Interface, error) {
 	scopes := []string{
