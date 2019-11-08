@@ -53,7 +53,7 @@ func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
 		BearerToken: token,
 		TLSClientConfig: rest.TLSClientConfig{
 			CAData:   []byte(ca),
-			Insecure: (len(ca) > 0),
+			Insecure: (len(ca) <= 0),
 		},
 	})
 }
