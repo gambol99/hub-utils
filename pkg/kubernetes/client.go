@@ -49,9 +49,12 @@ func New() (k8s.Interface, error) {
 // NewFromToken creates a kubernetes client from a endpoint and token
 func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
 	return k8s.NewForConfig(&rest.Config{
-		Host:            endpoint,
-		BearerToken:     token,
-		TLSClientConfig: rest.TLSClientConfig{CAData: []byte(ca)},
+		Host:        endpoint,
+		BearerToken: token,
+		TLSClientConfig: rest.TLSClientConfig{
+			CAData:   []byte(ca),
+			Insecure: (len(ca) > 0),
+		},
 	})
 }
 
