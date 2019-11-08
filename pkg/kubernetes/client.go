@@ -50,7 +50,7 @@ func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
 	return k8s.NewForConfig(&rest.Config{
 		BearerToken: token,
 		Host:        endpoint,
-		TLSClientConfig: TLSClientConfig{
+		TLSClientConfig: rest.TLSClientConfig{
 			Insecure: true,
 		},
 	})
