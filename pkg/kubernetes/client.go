@@ -19,7 +19,6 @@ package kubernetes
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -52,8 +51,7 @@ func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
 		Host:        endpoint,
 		BearerToken: token,
 		TLSClientConfig: rest.TLSClientConfig{
-			CAData:   []byte(ca),
-			Insecure: (len(ca) <= 0),
+			Insecure: true,
 		},
 	})
 }
@@ -88,11 +86,8 @@ func NewGKEClient(account, endpoint string) (k8s.Interface, error) {
 // WaitOnKubeAPI waits for the kube-apiserver to become available
 func WaitOnKubeAPI(ctx context.Context, client k8s.Interface, interval, timeout time.Duration) error {
 	return wait.PollImmediate(interval, timeout, func() (bool, error) {
-		fmt.Println("checkin api- DHSJHDJSHDSJHD:")
-
 		healthStatus := 0
 		client.Discovery().RESTClient().Get().AbsPath("/healthz").Do().StatusCode(&healthStatus)
-		fmt.Printf("HEL %v\n", healthStatus)
 
 		if healthStatus != http.StatusOK {
 			return false, nil
