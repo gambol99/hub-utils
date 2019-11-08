@@ -19,6 +19,7 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -47,12 +48,12 @@ func New() (k8s.Interface, error) {
 
 // NewFromToken creates a kubernetes client from a endpoint and token
 func NewFromToken(endpoint, token, ca string) (k8s.Interface, error) {
+	fmt.Println("HLLO")
+
 	return k8s.NewForConfig(&rest.Config{
-		Host:        endpoint,
 		BearerToken: token,
-		TLSClientConfig: rest.TLSClientConfig{
-			Insecure: true,
-		},
+		Host:        endpoint,
+		Insecure:    true,
 	})
 }
 
